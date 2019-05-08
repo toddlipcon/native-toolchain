@@ -30,7 +30,9 @@ if needs_build_package ; then
 
   setup_package_build $PACKAGE $PACKAGE_VERSION
 
-  wrap ./bootstrap --prefix=${LOCAL_INSTALL} --parallel=${BUILD_THREADS}
+  # Set KWSYS_PROCESS_USE_SELECT to workaround IMPALA-3191.
+  wrap ./bootstrap --prefix=${LOCAL_INSTALL} --parallel=${BUILD_THREADS} \
+    --enable-ccache -- -DKWSYS_PROCESS_USE_SELECT=0
   wrap make -j${BUILD_THREADS}
   wrap make install
 
